@@ -1,0 +1,37 @@
+{
+  "name": "react-apollo-redux",
+  "version": "0.1.0",
+  "description": "A small wrapper to dispatch actions in response to apollo mutations.",
+  "main": "lib/index.umd.js",
+  "repository": "git@github.com:Drawbotics/react-apollo-redux.git",
+  "license": "MIT",
+  "scripts": {
+    "clean": "rimraf lib",
+    "dev": "npm run clean && NODE_ENV=development rollup -c -w",
+    "build": "npm run clean && NODE_ENV=production rollup -c",
+    "prepublish": "npm run build"
+  },
+  "peerDependencies": {
+    "react-apollo": "^2.x",
+    "react-redux": "^5.x"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.0.0-beta.32",
+    "@babel/preset-env": "^7.0.0-beta.32",
+    "@babel/preset-react": "^7.0.0-beta.32",
+    "@babel/preset-stage-0": "^7.0.0-beta.32",
+    "babel-preset-env": "^7.0.0-beta.3",
+    "babel-preset-react": "^7.0.0-beta.3",
+    "babel-preset-stage-0": "^7.0.0-beta.3",
+    "rimraf": "^2.6.2",
+    "rollup": "^0.52.0",
+    "rollup-plugin-babel": "^4.0.0-beta.0",
+    "rollup-plugin-commonjs": "^8.2.6",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-replace": "^2.0.0",
+    "rollup-plugin-uglify": "^2.0.1"
+  },
+  "dependencies": {
+    "lodash": "^4.17.4"
+  }
+}
