@@ -16,7 +16,7 @@ export function graphql(query, options, ...rest) {
   if (operation !== 'mutation') {
     return (Component) => apolloGraphql(query, options, ...rest)(Component);
   }
-  else if (! options && ! options.name && operation === 'mutation') {
+  else if ( ! options && ! options.name && operation === 'mutation') {
     console.warn('Mutation detected without a explicit name. No redux actions will be dispatched.');
     return (Component) => apolloGraphql(query, options, ...rest)(Component);
   }
@@ -34,15 +34,24 @@ export function graphql(query, options, ...rest) {
         _wrapMutation(mutation) {
           const { dispatch } = this.props;
           return async (...args) => {
-            dispatch({ type: options.name |> snakeCase |> toUpper });
+            dispatch({
+              type: options.name |> snakeCase |> toUpper,
+              payload: args[0],
+            });
             try {
               const result = await mutation(...args);
-              dispatch({ type: options.name + '_success' |> snakeCase |> toUpper });
+              dispatch({
+                type: options.name + '_success' |> snakeCase |> toUpper,
+                payload: result,
+              });
               return result;
             }
-            catch (err) {
-              dispatch({ type: options.name + '_fail' |> snakeCase |> toUpper });
-              throw err;
+            catch (error) {
+              dispatch({
+                type: options.name + '_fail' |> snakeCase |> toUpper,
+                meta: { error },
+              });
+              throw error;
             }
           };
         }
