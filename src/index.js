@@ -4,9 +4,48 @@ import { connect } from 'react-redux';
 import upperCase from 'lodash/upperCase';
 import snakeCase from 'lodash/snakeCase';
 import toUpper from 'lodash/toUpper';
+import hoistNonReactStatics from 'hoist-non-react-statics';
 
 
 export { compose } from 'react-apollo';
+
+
+function reduxGraphql(options) {
+  return (Component) => class ReduxGraphql extends React.Component {
+    render() {
+      const mutation = this._wrapMutation(this.props[options.name]);
+      return React.createElement(Component, {
+        ...this.props,
+        [options.name]: mutation,
+      });
+    }
+
+    _wrapMutation(mutation) {
+      const { dispatch } = this.props;
+      return async (...args) => {
+        dispatch({
+          type: options.name |> snakeCase |> toUpper,
+          payload: args[0],
+        });
+        try {
+          const result = await mutation(...args);
+          dispatch({
+            type: options.name + '_success' |> snakeCase |> toUpper,
+            payload: result,
+          });
+          return result;
+        }
+        catch (error) {
+          dispatch({
+            type: options.name + '_fail' |> snakeCase |> toUpper,
+            meta: { error },
+          });
+          throw error;
+        }
+      };
+    }
+  }
+}
 
 
 export function graphql(query, options, ...rest) {
@@ -21,44 +60,12 @@ export function graphql(query, options, ...rest) {
   }
   else {
     return (Component) => {
-      class GraphqlMutation extends React.Component {
-        render() {
-          const mutation = this._wrapMutation(this.props[options.name]);
-          return React.createElement(Component, {
-            ...this.props,
-            [options.name]: mutation,
-          });
-        }
-
-        _wrapMutation(mutation) {
-          const { dispatch } = this.props;
-          return async (...args) => {
-            dispatch({
-              type: options.name |> snakeCase |> toUpper,
-              payload: args[0],
-            });
-            try {
-              const result = await mutation(...args);
-              dispatch({
-                type: options.name + '_success' |> snakeCase |> toUpper,
-                payload: result,
-              });
-              return result;
-            }
-            catch (error) {
-              dispatch({
-                type: options.name + '_fail' |> snakeCase |> toUpper,
-                meta: { error },
-              });
-              throw error;
-            }
-          };
-        }
-      }
-      return compose(
+      const Result = compose(
         connect(),
         apolloGraphql(query, options, ...rest),
-      )(GraphqlMutation);
+        reduxGraphql(options),
+      )(Component);
+      return hoistNonReactStatics(Result, Component);
     };
   }
 }
