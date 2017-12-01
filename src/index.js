@@ -10,13 +10,12 @@ export { compose } from 'react-apollo';
 
 
 export function graphql(query, options, ...rest) {
-  // We can safely assume there's only gonna be one definition since apollo
-  // triggers an error if there's more than that.
+  // The first definition is the main operation
   const { operation } = query.definitions[0];
   if (operation !== 'mutation') {
     return (Component) => apolloGraphql(query, options, ...rest)(Component);
   }
-  else if ( ! options && ! options.name && operation === 'mutation') {
+  else if ( ! options || ! options.name && operation === 'mutation') {
     console.warn('Mutation detected without a explicit name. No redux actions will be dispatched.');
     return (Component) => apolloGraphql(query, options, ...rest)(Component);
   }
