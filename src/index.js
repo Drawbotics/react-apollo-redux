@@ -44,6 +44,7 @@ function reduxGraphql(options) {
         catch (error) {
           dispatch({
             type: prefix + options.name + '_fail' |> snakeCase |> toUpper,
+            payload: args[0],
             meta: { error },
           });
           throw error;
