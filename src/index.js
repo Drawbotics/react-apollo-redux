@@ -27,13 +27,13 @@ function reduxGraphql(options) {
       const { dispatch } = this.props;
       return async (...args) => {
         dispatch({
-          type: prefix + options.name |> snakeCase |> toUpper,
+          type: prefix + (options.name |> snakeCase |> toUpper),
           payload: args[0],
         });
         try {
           const result = await mutation(...args);
           dispatch({
-            type: prefix + options.name + '_success' |> snakeCase |> toUpper,
+            type: prefix + (options.name + '_success' |> snakeCase |> toUpper),
             payload: {
               result,
               args: args[0],
@@ -43,7 +43,7 @@ function reduxGraphql(options) {
         }
         catch (error) {
           dispatch({
-            type: prefix + options.name + '_fail' |> snakeCase |> toUpper,
+            type: prefix + (options.name + '_fail' |> snakeCase |> toUpper),
             payload: args[0],
             meta: { error },
           });
