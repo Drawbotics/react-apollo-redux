@@ -1,6 +1,6 @@
 {
   "name": "react-apollo-redux",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "A small wrapper to dispatch actions in response to apollo mutations.",
   "main": "lib/index.umd.js",
   "repository": "git@github.com:Drawbotics/react-apollo-redux.git",
