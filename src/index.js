@@ -10,6 +10,9 @@ import hoistNonReactStatics from 'hoist-non-react-statics';
 export { compose } from 'react-apollo';
 
 
+const prefix = '@@MUTATION/'
+
+
 function reduxGraphql(options) {
   return (Component) => class ReduxGraphql extends React.Component {
     render() {
@@ -24,20 +27,23 @@ function reduxGraphql(options) {
       const { dispatch } = this.props;
       return async (...args) => {
         dispatch({
-          type: options.name |> snakeCase |> toUpper,
+          type: prefix + options.name |> snakeCase |> toUpper,
           payload: args[0],
         });
         try {
           const result = await mutation(...args);
           dispatch({
-            type: options.name + '_success' |> snakeCase |> toUpper,
-            payload: result,
+            type: prefix + options.name + '_success' |> snakeCase |> toUpper,
+            payload: {
+              result,
+              args: args[0],
+            }
           });
           return result;
         }
         catch (error) {
           dispatch({
-            type: options.name + '_fail' |> snakeCase |> toUpper,
+            type: prefix + options.name + '_fail' |> snakeCase |> toUpper,
             meta: { error },
           });
           throw error;
