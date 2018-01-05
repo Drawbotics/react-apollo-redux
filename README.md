@@ -3,18 +3,18 @@
 This library wraps the `graphql` function from [react-apollo](https://github.com/apollographql/react-apollo) function by also dispatching redux actions when a mutation is called.
 
 If you were using
-```
+```js
 import { graphql } from 'react-apollo';
 ```
 you may now do
-```
+```js
 import { graphql } from 'react-apollo-redux';
 ```
 
 ### Usage
 
 When a mutation is called, an action bearing the same name (snake and upper cased) and prefixed with `@@MUTATION` is dispatched. For example, a mutation like this
-```
+```js
 const FollowItems = gql`
   mutation followItems($itemIds: [ID]!) {
     followItems(item_ids: $itemIds) {
@@ -32,7 +32,7 @@ Will dispatch the following actions with respective types:
 
 #### type @@MUTATION/FOLLOW_ITEMS
 `@@MUTATION/[name]` contains the arguments to the mutation in its payload. For example, if the mutation was called this way
-```
+```js
 followItems({
   variables: {
     itemIds: itemIds,
