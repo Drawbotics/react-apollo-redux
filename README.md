@@ -1,4 +1,11 @@
+<img src="https://raw.githubusercontent.com/Drawbotics/react-apollo-redux/master/images/react-apollo-redux.png" height="150px">
+
 # React Apollo Redux
+
+[![NPM](https://nodei.co/npm/react-apollo-redux.png?compact=true)](https://www.npmjs.com/package/react-apollo-redux)
+
+[![npm version](https://img.shields.io/npm/v/react-apollo-redux.svg?style=flat-square)](https://www.npmjs.com/package/react-apollo-redux)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 
 This library wraps the `graphql` function from [react-apollo](https://github.com/apollographql/react-apollo) function by also dispatching redux actions when a mutation is called.
 
