@@ -12,6 +12,12 @@ export { compose } from 'react-apollo';
 
 const prefix = '@@MUTATION/'
 
+export function constant(name, type = '') {
+  return (
+    prefix +
+    toUpper(snakeCase(name + (type && '_' + type)) |> snakeCase |> toUpper)
+  );
+}
 
 function reduxGraphql(options) {
   return (Component) => class ReduxGraphql extends React.Component {
